@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title>Document</title>
+    </head>
+
+    <body>
+        <nav>
+            <a href="#/">start</a>
+        </nav>
+        <div id="app">
+            Hello backbone
+        </div>
+        <script type="text/template" id="start">
+            <div class="start">
+                <div class="userplace">
+                    <label for="username">Имя пользователя: </label>
+                    <input type="text" id="username" />
+                </div>
+                <div class="buttonplace">
+                    <input type="button" id="handler" value="Проверить" />
+                </div>
+            </div>
+        </script>
+        <script type="text/template" id="error">
+            <div class="error">
+                Ошибка. Пользователь  <%= username %> не найден.
+                    <a href="#!/">Go back</a>
+            </div>
+        </script>
+        <script type="text/template" id="success">
+            <div class="success">
+                Пользователь <%= username %> найден.
+                    <a href="#!/">Go back</a>
+            </div>
+        </script>
+    </body>
+
+</html>
