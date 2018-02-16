@@ -1,6 +1,24 @@
-import Backbone,{Router, View} from 'backbone'
-let AppState = {
-    username: ""
+import Backbone, {
+    Router,
+    View,
+    Model,
+    Collection
+} from 'backbone'
+function props(value) {
+    return function decorator(target) {
+        _.extend(target.prototype, value);
+    }
+}
+class AppState extends Model {
+    constructor(defaults) {
+        super(
+            defaults = {
+                username: '',
+                state: 'start'
+            }
+        )
+    }
+
 }
 const Names = ['billy', 'dilly', 'willy']
 let Views = {
@@ -10,7 +28,7 @@ class AppRouter extends Router {
     constructor() {
         super()
     }
-    get routes () {
+    get routes() {
         return {
             '': 'start', // Пустой hash-тэг
             '!/': 'start', // Начальная страница
@@ -20,74 +38,98 @@ class AppRouter extends Router {
     }
     start() {
         if (Views.start !== null) {
-            Views.start.render()
+            appState.set({
+                state: 'start'
+            })
         }
     }
 
     success() {
         if (Views.success !== null) {
-            Views.success.render()
+            appState.set({
+                state: 'start'
+            })
         }
     }
 
     error() {
         if (Views.error !== null) {
-            Views.error.render()
+            appState.set({
+                state: 'start'
+            })
         }
     }
 }
-
-class Start extends View {
-    get el () {
-        return $('#app')
-    }
-    get template() {
-        return _.template($('#start').html())
-    }
-    get events () {
-        return {
-            "click #handler": "check"
+class AppViews extends View {
+    constructor(options) {
+        super(Object.assign({}, options, {
+            el: $('#app'),
+            events: {
+                "click #handler": "check"
+            }
+        }))
+        this.templates = {
+            start: _.template($('#start').html()),
+            error: _.template($('#error').html()),
+            success: _.template($('#success').html())
         }
     }
-    check() {        
-        AppState.username = $(this.el).find("input:text").val();
-        if (_.detect(Names, (name) => name === AppState.username)) // Проверка имени пользователя
-            appRouter.navigate('!/success', true); // переход на страницу success
-        else
-            appRouter.navigate('!/error', true); // переход на страницу error
+    initialize() {
+        this.model.bind('change', this.render, this)
+    }
+    render() {
+        let state = this.model.get('state')
+        $(this.el).html(this.templates[state](this.model.toJSON()))
+        return this
+    }
+    check() {
+        let username = $(this.el).find("input:text").val();
+        let state = FamilyCollection.checkUser(username) ? 'success' : 'error'
+        appState.set({
+            username,
+            state
+        })
+    }
+}
+
+class UserNameModel extends Model {
+    constructor(options) {
+        super(Object.assign({},options,{            
+            defaults: {
+                'Name': ''
+            }
+        }))
+    }
+}
+class Family extends Collection {
+    constructor(options) {
+        super(options)
+        this.model = new UserNameModel()
     }
 
-    render() {
-        $(this.el).html(this.template());
+    checkUser(username) {
+        return this.find((user) => user.get('Name') == username) !== null
     }
 }
-
-class ErrorTemplate extends View {
-    get el() {
-        return $('#app')
-    }
-    get template() {
-        return _.template($('#error').html())
-    }   
-    render() {
-        $(this.el).html(this.template(AppState));
-    }
-}
-class Success extends View {    
-    get el() {
-        return $('#app')
-    }
-    get template() {
-        return _.template($('#success').html())
-    }
-    render() {
-        $(this.el).html(this.template(AppState));
-    }
-}
-Views = {
-    start: new Start(),
-    error: new ErrorTemplate(),
-    success: new Success()
-}
+let appState = new AppState()
 let appRouter = new AppRouter()
+let appViews = new AppViews({
+    model: appState
+})
+let familyList = [{
+        Name: 'Bob'
+    },
+    {
+        Name: 'Patrick'
+    },
+    {
+        Name: 'Elza'
+    }
+]
+let FamilyCollection = new Family(familyList)
+appState.trigger('change')
+appState.bind('change:state', function(options) {
+    let state = this.get(state)
+    appRouter.navigate(`!/${state == 'start' ? '' : state}`, false)
+})
 Backbone.history.start()

@@ -6,11 +6,7 @@ module.exports = function () {
                     test: /\.js$/,
                     exclude: /node_modules/,
                     use: {
-                        loader: 'babel-loader',
-                        query: {
-                            presets: ['env'],
-                            compact: false
-                        }
+                        loader: 'babel-loader'
                     }
                 }
             ]
