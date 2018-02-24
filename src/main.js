@@ -25,11 +25,9 @@ let Views = {
 
 }
 class AppRouter extends Router {
-    constructor() {
-        super()
-    }
-    get routes() {
-        return {
+    constructor(options) {
+        super(options)
+        this.routes = {
             '': 'start', // Пустой hash-тэг
             '!/': 'start', // Начальная страница
             '!/success': 'success', // Блок удачи
