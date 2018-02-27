@@ -44,7 +44,7 @@ const config = merge(
             ],
             resolve: {        
                 alias: {
-                    src: path.resolve(__dirname, 'src/'),                    
+                    '@': path.resolve(__dirname, 'src/'),                    
                     scss_modules: path.resolve(__dirname, 'src/scss'),
                     '@sprite': path.resolve(__dirname, 'src/sprite/output')                    
                 }
