@@ -1,8 +1,7 @@
 module.exports = function () {
     return {
         module: {
-            rules: [
-                {
+            rules: [{
                     test: /\.js$/,
                     exclude: /node_modules/,
                     use: ['babel-loader', 'eslint-loader']
@@ -10,5 +9,5 @@ module.exports = function () {
 
             ]
         }
-    }    
+    }
 }

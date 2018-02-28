@@ -48,6 +48,7 @@
     "babel-loader": "^7.1.2",
     "clean-webpack-plugin": "^0.1.17",
     "eslint-config-airbnb-base": "^12.1.0",
+    "eslint-plugin-backbone": "^2.1.1",
     "eslint-plugin-import": "2.7.0",
     "file-loader": "^1.1.5",
     "image-webpack-loader": "^3.4.2",
