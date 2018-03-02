@@ -9,67 +9,67 @@ const style = require('./webpack_modules/scss');
 const css = require('./webpack_modules/css');
 const uglifyJs = require('./webpack_modules/uglify');
 const cleanUp = require('clean-webpack-plugin');
-const htmlLoader = require('./webpack_modules/html-loader')
+const htmlLoader = require('./webpack_modules/html-loader');
+
 const PATHS = {
     source: path.join(__dirname, 'src'),
-    build: path.join(__dirname, 'build')
+    build: path.join(__dirname, 'build'),
 };
 
 const config = merge(
     [{
-            entry: {                
-                vendor: ['jquery', 'underscore', 'backbone'],                                
-                app: `${PATHS.source}/main`,    
+            entry: {
+                vendor: ['jquery', 'underscore', 'backbone'],
+                app: `${PATHS.source}/main`,
             },
             output: {
                 path: PATHS.build,
-                filename: 'js/[name].js'
+                filename: 'js/[name].js',
             },
-            plugins: [                                               
+            plugins: [
                 new HtmlWebpackPlugin({
                     chunks: ['app', 'vendor'],
-                    template: `${PATHS.source}/index.html`
+                    template: `${PATHS.source}/index.html`,
                 }),
                 new webpack.optimize.CommonsChunkPlugin({
                     names: ['app', 'vendor'],
-                    filename:'[name].js'
+                    filename: '[name].js',
                 }),
                 new webpack.ProvidePlugin({
                     $: 'jquery',
                     jQuery: 'jquery',
-                    Backbone: 'backbone',
-                    _:'underscore'               
+                    _: 'underscore',
                 }),
-                new cleanUp('build')
+                new cleanUp('build'),
             ],
-            resolve: {        
+            resolve: {
+                modules: ['node_modules'],
                 alias: {
-                    src: path.resolve(__dirname, 'src/'),                    
+                    '@': path.resolve(__dirname, 'src/'),
                     scss_modules: path.resolve(__dirname, 'src/scss'),
-                    '@sprite': path.resolve(__dirname, 'src/sprite/output')                    
-                }
-            }
-        },     
-        htmlLoader(),   
-        babel()
-    ]
-);
+                    '@sprite': path.resolve(__dirname, 'src/sprite/output'),
+                },
+            },
+        },
+        htmlLoader(),
+        babel(),
+    ]);
 
 module.exports = function (env) {
     if (env === 'production') {
-        return merge([            
+        return merge([
             config,
             cssExtract(),
-            uglifyJs()
-        ])
-    };
+            uglifyJs(),
+        ]);
+    }
     if (env === 'development') {
-        config.devtool = 'source-map'
+        config.devtool = 'source-map';
         return merge([{},
             config,
             devserver(),
             style(),
-            css()            
-        ])
+            css(),
+        ]);
     }
-}
+};
