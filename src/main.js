@@ -1,3 +1,9 @@
+import TodoApp from './views/todo/todo';
+
+$(() => {
+  const App = new TodoApp();
+  return App;
+});
 // import Backbone, {
 //   Router,
 //   View,

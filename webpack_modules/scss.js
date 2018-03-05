@@ -27,7 +27,7 @@ module.exports = function (paths) {
                             {
                               loader: 'sass-loader',
                               options: {                                
-                                sourceMap: true                                
+                                sourceMap: true                             
                               }
                             },
                             {

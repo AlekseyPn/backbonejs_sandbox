@@ -10,6 +10,7 @@ const css = require('./webpack_modules/css');
 const uglifyJs = require('./webpack_modules/uglify');
 const cleanUp = require('clean-webpack-plugin');
 const htmlLoader = require('./webpack_modules/html-loader');
+const imageLoader = require('./webpack_modules/image-loader');
 
 const PATHS = {
     source: path.join(__dirname, 'src'),
@@ -19,7 +20,6 @@ const PATHS = {
 const config = merge(
     [{
             entry: {
-                vendor: ['jquery', 'underscore', 'backbone'],
                 app: `${PATHS.source}/main`,
             },
             output: {
@@ -28,11 +28,11 @@ const config = merge(
             },
             plugins: [
                 new HtmlWebpackPlugin({
-                    chunks: ['app', 'vendor'],
+                    chunks: ['app'],
                     template: `${PATHS.source}/index.html`,
                 }),
                 new webpack.optimize.CommonsChunkPlugin({
-                    names: ['app', 'vendor'],
+                    names: ['app'],
                     filename: '[name].js',
                 }),
                 new webpack.ProvidePlugin({
@@ -46,12 +46,13 @@ const config = merge(
                 modules: ['node_modules'],
                 alias: {
                     '@': path.resolve(__dirname, 'src/'),
-                    scss_modules: path.resolve(__dirname, 'src/scss'),
+                    '@styles': path.resolve(__dirname, 'src/scss'),
                     '@sprite': path.resolve(__dirname, 'src/sprite/output'),
                 },
             },
         },
         htmlLoader(),
+        imageLoader(),
         babel(),
     ]);
 

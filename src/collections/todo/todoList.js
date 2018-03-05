@@ -1,14 +1,14 @@
 import {
   Collection,
 } from 'backbone';
-import Store from 'backbone.localstorage';
 import TodoItem from '@/models/todo/todoItem.js';
+import LocalStorage from 'backbone.localstorage';
 
 class TodoList extends Collection {
-  constructor(options) {
-    super(options);
+  constructor(model, options) {
+    super(model, options);
     this.model = TodoItem;
-    this.localStorage = new Store('todos');
+    this.localStorage = new LocalStorage('todossss');
   }
 
   done() {

@@ -5,7 +5,7 @@ module.exports = function () {
                 {
                     test: /\.html$/,
                     exclude: /node_modules/,
-                    loader: 'html-loader',
+                    loader: 'mustache-loader',
                     options: {
                         minimize: true
                     }
